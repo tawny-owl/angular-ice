@@ -24,8 +24,8 @@ angular.module('Icecomm',[])
     replace: true,
     require: '^icecomm',
     template:
-      '<div>'+
-        '<video autoplay class="local" ng-src={{local.stream}}></video>'+
+      '<div ng-if="!!local">'+
+        '<video autoplay class="icecomm-local" ng-src={{local.stream}}></video>'+
       '</div>',
     link: function($scope, ele, atts, icecomm) {
       console.log('something');
@@ -58,7 +58,7 @@ angular.module('Icecomm',[])
     replace: true,
     template: '<div>'+
       '<ul><li ng-repeat="peer in peers">'+
-        '<video autoplay ng-src="{{peer.stream}}"></video>'+
+        '<video class="icecomm-peer" autoplay ng-src="{{peer.stream}}"></video>'+
       '</li></ul>'+
     '</div>',
     link: function($scope, ele, atts, icecomm) {
