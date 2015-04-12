@@ -86,6 +86,9 @@ angular.module('Icecomm',[])
         if (!atts.stream === 'false') {
           connectOptions.stream = false;
         }
+        if (!atts.limit) {
+          connectOptions.limit = atts.limit;
+        }
         return connectOptions;
       }
     }
