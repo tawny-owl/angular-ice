@@ -10,8 +10,9 @@ angular.module('Icecomm',[])
     restrict: 'AE',
     scope: {},
     bindToController: true,
-    controller: function($attrs) {
-      var debugOptions = Boolean($attrs.debug);
+    controller: function($attrs, $element) {
+      var debugOptions = {debug: Boolean($attrs.debug) };
+      var _this = this;
       this.comm = new Icecomm($attrs.apikey, debugOptions);
     },
     controllerAs: 'icecomm'
@@ -22,14 +23,10 @@ angular.module('Icecomm',[])
     restrict: 'E',
     replace: true,
     require: '^icecomm',
-    template:
-      '<div ng-if="!!local">'+
-        '<video autoplay class="icecomm-local" ng-src={{local.stream}}></video>'+
-      '</div>',
+    template: '<video ng-if="local" autoplay class="icecomm-local" ng-src={{local.stream}}></video>',
     link: function($scope, ele, atts, icecomm) {
       console.log('something');
       var comm = icecomm.comm;
-      $scope.peers = [];
       comm.on("local",function(peer){
         $scope.$apply(function () {
           peer.stream = $sce.trustAsResourceUrl(peer.stream);
@@ -44,11 +41,8 @@ angular.module('Icecomm',[])
     restrict: 'E',
     require: '^icecomm',
     replace: true,
-    template: '<div>'+
-      '<ul><li ng-repeat="peer in peers">'+
-        '<video class="icecomm-peer" autoplay ng-src="{{peer.stream}}"></video>'+
-      '</li></ul>'+
-    '</div>',
+    template:
+        '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}"></video>',
     link: function($scope, ele, atts, icecomm) {
       var comm = icecomm.comm;
       $scope.peers = [];
@@ -79,18 +73,14 @@ angular.module('Icecomm',[])
       $scope.text = atts.text || "Connect";
       $scope.connect = function() {
         var connectOptions = createConnectOptions();
-        console.log(connectOptions);
         comm.connect(atts.room, connectOptions);
       }
       function createConnectOptions() {
         var connectOptions = {};
-        console.log(atts.audio);
-        console.log(typeof atts.audio);
         if (atts.video === 'false') {
           connectOptions.video = false;
         }
         if (atts.audio === 'false') {
-          console.log('entered');
           connectOptions.audio = false;
         }
         if (!atts.stream === 'false') {
@@ -106,16 +96,13 @@ angular.module('Icecomm',[])
     restrict: 'E',
     require: '^icecomm',
     replace: true,
-    // scope: true,
-    template: '<button ng-click="leave()">{{text}}</div>',
+    template: '<button ng-if="local" ng-click="leave()">{{text}}</div>',
     link: function($scope, ele, atts, icecomm) {
       var comm = icecomm.comm;
       $scope.text = atts.text || "Disconnect";
-
       $scope.leave = function() {
-        ele.remove("video.icecomm-local");
-        // ele.remove("video.icecomm-peer");
         comm.leave();
+        $scope.local = null;
       }
     }
   };
