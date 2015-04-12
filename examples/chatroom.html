@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://cdn.icecomm.io/icecomm.js" ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js" ></script>
+  <script type="text/javascript" src="./src/angular-ice.js"></script>
+</head>
+<body ng-app="Main" icecomm apikey="hKtqGYhzfZCoXXTn5X.XhbswJ7ECxIto51Q65AxOJBqeVP45ha">
+<!-- <body ng-app="Main"> -->
+  <!-- <button ng-click="connect()">button</button> -->
+  <icecomm-connect room="custom room"></icecomm-connect>
+  <icecomm-local></icecomm-local>
+  <icecomm-peer></icecomm-peer>
+
+</body>
+  <script type="text/javascript" >
+    angular.module("Main", [ "Icecomm", /* "Dummy"  /* */]);
+  </script>
+</html>
