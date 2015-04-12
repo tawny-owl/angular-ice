@@ -18,6 +18,18 @@ The following script files needs to be inserted
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js" ></script>
   <script src="./src/angular-ice.js"></script>
 ````
+
+#Where does my local stream appear
+````
+<icecomm-local/>
+````
+
+#Where do my peers appear
+````
+<icecomm-peer/>
+````
+
+#Connecting to Room
 To connect to a room, you can either insert a custom directive element or attribute:
 ````
 <icecomm-connect room="custom room"/ text="Connect to custom room">
@@ -27,4 +39,8 @@ or
 ````
 <button icecomm-connect ng-click="icecomm.connect('custom room')">
 ```
-To determine where the bottom w
+
+#Leaving a room
+````
+<icecomm-leave text="Leave"/>
+````
