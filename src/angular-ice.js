@@ -8,12 +8,11 @@ angular.module('Icecomm',[])
 .directive('icecomm', function() {
   return {
     restrict: 'AE',
-    scope: {
-
-    },
+    scope: {},
     bindToController: true,
     controller: function($attrs) {
-      this.comm = new Icecomm( $attrs.apikey );
+      var debugOptions = Boolean($attrs.debug);
+      this.comm = new Icecomm($attrs.apikey, debugOptions);
     },
     controllerAs: 'icecomm'
   }
@@ -37,17 +36,6 @@ angular.module('Icecomm',[])
           $scope.local = peer;
         });
       });
-
-      $scope.close = function(){
-        comm.leave();
-      };
-      $scope.roomEvent = function(e,value){
-        if(e.which !== 13) return;
-        $scope.connect(room.value);
-        room.value = "";
-      };
-      ele.find("button.close").bind("click",$scope.close);
-      ele.on('$destroy', $scope.close);
     }
   };
 })
@@ -76,13 +64,6 @@ angular.module('Icecomm',[])
           $scope.peers.splice($scope.peers.indexOf(peer),1);
         });
       });
-
-      $scope.close = function(){
-        comm.leave();
-      };
-
-      ele.find("button.close").bind("click",$scope.close);
-      ele.on('$destroy', $scope.close);
     }
   };
 })
@@ -91,13 +72,50 @@ angular.module('Icecomm',[])
     restrict: 'E',
     require: '^icecomm',
     replace: true,
+    scope: true,
     template: '<button ng-click="connect()">{{text}}</div>',
     link: function($scope, ele, atts, icecomm) {
       var comm = icecomm.comm;
       $scope.text = atts.text || "Connect";
-
       $scope.connect = function() {
-        comm.connect(atts.room);
+        var connectOptions = createConnectOptions();
+        console.log(connectOptions);
+        comm.connect(atts.room, connectOptions);
+      }
+      function createConnectOptions() {
+        var connectOptions = {};
+        console.log(atts.audio);
+        console.log(typeof atts.audio);
+        if (atts.video === 'false') {
+          connectOptions.video = false;
+        }
+        if (atts.audio === 'false') {
+          console.log('entered');
+          connectOptions.audio = false;
+        }
+        if (!atts.stream === 'false') {
+          connectOptions.stream = false;
+        }
+        return connectOptions;
+      }
+    }
+  };
+})
+.directive('icecommLeave', function() {
+  return {
+    restrict: 'E',
+    require: '^icecomm',
+    replace: true,
+    // scope: true,
+    template: '<button ng-click="leave()">{{text}}</div>',
+    link: function($scope, ele, atts, icecomm) {
+      var comm = icecomm.comm;
+      $scope.text = atts.text || "Disconnect";
+
+      $scope.leave = function() {
+        ele.remove("video.icecomm-local");
+        // ele.remove("video.icecomm-peer");
+        comm.leave();
       }
     }
   };
