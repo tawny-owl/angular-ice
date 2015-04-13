@@ -5,11 +5,10 @@ angular.module('Icecomm',[
   'icecomm.peer',
   'icecomm.leave'
   ]);
-
 angular.module('icecomm.controller', [])
-.directive('icecomm', icecommDirective);
+.directive('icecomm', icecomm);
 
-function icecommDirective() {
+function icecomm() {
   return {
     restrict: 'AE',
     scope: {},
@@ -61,9 +60,9 @@ function icecommConnectDirective() {
   };
 }
 angular.module('icecomm.leave', [])
-.directive('icecommLeave', icecommLeaveDirective);
+.directive('icecommLeave', icecommLeave);
 
-function icecommLeaveDirective() {
+function icecommLeave() {
   return {
     restrict: 'E',
     require: '^icecomm',
@@ -82,10 +81,10 @@ function icecommLeaveDirective() {
   };
 }
 angular.module('icecomm.local', [])
-.directive('icecommLocal', icecommLocalDirective);
+.directive('icecommLocal', icecommLocal);
 
 
-function icecommLocalDirective($sce) {
+function icecommLocal($sce) {
   return {
     restrict: 'E',
     replace: true,
@@ -103,9 +102,9 @@ function icecommLocalDirective($sce) {
   };
 }
 angular.module('icecomm.peer', [])
-.directive('icecommPeer', icecommPeerDirective);
+.directive('icecommPeer', icecommPeer);
 
-function icecommPeerDirective($sce) {
+function icecommPeer($sce) {
   return {
     restrict: 'E',
     require: '^icecomm',
