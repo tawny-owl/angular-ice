@@ -1,8 +1,8 @@
 angular.module('icecomm.local', [])
-.directive('icecommLocal', icecommLocalDirective);
+.directive('icecommLocal', icecommLocal);
 
 
-function icecommLocalDirective($sce) {
+function icecommLocal($sce) {
   return {
     restrict: 'E',
     replace: true,

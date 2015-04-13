@@ -1,7 +1,7 @@
 angular.module('icecomm.leave', [])
-.directive('icecommLeave', icecommLeaveDirective);
+.directive('icecommLeave', icecommLeave);
 
-function icecommLeaveDirective() {
+function icecommLeave() {
   return {
     restrict: 'E',
     require: '^icecomm',

@@ -1,7 +1,7 @@
 angular.module('icecomm.controller', [])
-.directive('icecomm', icecommDirective);
+.directive('icecomm', icecomm);
 
-function icecommDirective() {
+function icecomm() {
   return {
     restrict: 'AE',
     scope: {},

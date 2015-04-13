@@ -1,7 +1,7 @@
 angular.module('icecomm.peer', [])
-.directive('icecommPeer', icecommPeerDirective);
+.directive('icecommPeer', icecommPeer);
 
-function icecommPeerDirective($sce) {
+function icecommPeer($sce) {
   return {
     restrict: 'E',
     require: '^icecomm',
