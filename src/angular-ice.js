@@ -5,24 +5,28 @@
 */
 
 angular.module('Icecomm',[])
-.directive('icecomm', function() {
+.directive('icecomm', icecommDirective)
+.directive('icecommLocal', icecommLocalDirective)
+.directive('icecommPeer', icecommPeerDirective)
+.directive('icecommConnect', icecommConnectDirective)
+.directive('icecommLeave', icecommLeaveDirective);
+
+function icecommDirective() {
   return {
     restrict: 'AE',
     scope: {},
     bindToController: true,
     controller: function($attrs, $element) {
-      var debugOptions = {debug: Boolean($attrs.debug) };
-      var _this = this;
-      this.hi = "hi";
-      this.comm = new Icecomm($attrs.apikey, debugOptions);
-      this.connect = function(room, options) {
-        _this.comm.connect(room, options);
-      }
+      var debugOptions = {debug: Boolean($attrs.debug)};
+      var comm = new Icecomm($attrs.apikey, debugOptions);
+      this.comm = comm;
+      this.connect = comm.connect;
     },
     controllerAs: 'comm'
   }
-})
-.directive('icecommLocal', function($sce) {
+}
+
+function icecommLocalDirective($sce) {
   return {
     restrict: 'E',
     replace: true,
@@ -38,8 +42,9 @@ angular.module('Icecomm',[])
       });
     }
   };
-})
-.directive('icecommPeer', function($sce) {
+}
+
+function icecommPeerDirective($sce) {
   return {
     restrict: 'E',
     require: '^icecomm',
@@ -63,8 +68,9 @@ angular.module('Icecomm',[])
       });
     }
   };
-})
-.directive('icecommConnect', function() {
+}
+
+function icecommConnectDirective() {
   return {
     restrict: 'E',
     require: '^icecomm',
@@ -95,8 +101,9 @@ angular.module('Icecomm',[])
       }
     }
   };
-})
-.directive('icecommLeave', function() {
+}
+
+function icecommLeaveDirective() {
   return {
     restrict: 'E',
     require: '^icecomm',
@@ -111,4 +118,4 @@ angular.module('Icecomm',[])
       }
     }
   };
-});
+}
