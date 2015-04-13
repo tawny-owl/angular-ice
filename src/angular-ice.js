@@ -5,62 +5,53 @@
 */
 
 angular.module('Icecomm',[])
-.directive('icecomm', function() {
+.directive('icecomm', icecommDirective)
+.directive('icecommLocal', icecommLocalDirective)
+.directive('icecommPeer', icecommPeerDirective)
+.directive('icecommConnect', icecommConnectDirective)
+.directive('icecommLeave', icecommLeaveDirective);
+
+function icecommDirective() {
   return {
     restrict: 'AE',
-    scope: {
-
-    },
+    scope: {},
     bindToController: true,
-    controller: function($attrs) {
-      this.comm = new Icecomm( $attrs.apikey );
+    controller: function($attrs, $element) {
+      var debugOptions = {debug: Boolean($attrs.debug)};
+      var comm = new Icecomm($attrs.apikey, debugOptions);
+      this.comm = comm;
+      this.connect = comm.connect;
     },
-    controllerAs: 'icecomm'
+    controllerAs: 'comm'
   }
-})
-.directive('icecommLocal', function($sce) {
+}
+
+function icecommLocalDirective($sce) {
   return {
     restrict: 'E',
     replace: true,
     require: '^icecomm',
-    template:
-      '<div>'+
-        '<video autoplay class="local" ng-src={{local.stream}}></video>'+
-      '</div>',
+    template: '<video ng-if="local" autoplay class="icecomm-local" ng-src={{local.stream}}></video>',
     link: function($scope, ele, atts, icecomm) {
-      console.log('something');
       var comm = icecomm.comm;
-      $scope.peers = [];
       comm.on("local",function(peer){
         $scope.$apply(function () {
           peer.stream = $sce.trustAsResourceUrl(peer.stream);
           $scope.local = peer;
         });
       });
-
-      $scope.close = function(){
-        comm.leave();
-      };
-      $scope.roomEvent = function(e,value){
-        if(e.which !== 13) return;
-        $scope.connect(room.value);
-        room.value = "";
-      };
-      ele.find("button.close").bind("click",$scope.close);
-      ele.on('$destroy', $scope.close);
     }
   };
-})
-.directive('icecommPeer', function($sce) {
+}
+
+function icecommPeerDirective($sce) {
   return {
     restrict: 'E',
     require: '^icecomm',
-    replace: true,
-    template: '<div>'+
-      '<ul><li ng-repeat="peer in peers">'+
-        '<video autoplay ng-src="{{peer.stream}}"></video>'+
-      '</li></ul>'+
-    '</div>',
+    replace: false,
+    template:
+    '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}">' +
+    '</video>',
     link: function($scope, ele, atts, icecomm) {
       var comm = icecomm.comm;
       $scope.peers = [];
@@ -72,33 +63,62 @@ angular.module('Icecomm',[])
       });
 
       comm.on("disconnect", function(peer){
-        $scope.$apply(function () {
+        // $scope.$apply(function () {
           $scope.peers.splice($scope.peers.indexOf(peer),1);
-        });
+        // });
       });
-
-      $scope.close = function(){
-        comm.leave();
-      };
-
-      ele.find("button.close").bind("click",$scope.close);
-      ele.on('$destroy', $scope.close);
     }
   };
-})
-.directive('icecommConnect', function() {
+}
+
+function icecommConnectDirective() {
   return {
     restrict: 'E',
     require: '^icecomm',
     replace: true,
+    scope: true,
     template: '<button ng-click="connect()">{{text}}</div>',
-    link: function($scope, ele, atts, icecomm) {
-      var comm = icecomm.comm;
+    link: function($scope, ele, atts, comm) {
       $scope.text = atts.text || "Connect";
-
       $scope.connect = function() {
-        comm.connect(atts.room);
+        var connectOptions = createConnectOptions();
+        comm.connect(atts.room, connectOptions);
+      }
+      function createConnectOptions() {
+        var connectOptions = {};
+        if (atts.video === 'false') {
+          connectOptions.video = false;
+        }
+        if (atts.audio === 'false') {
+          connectOptions.audio = false;
+        }
+        if (!atts.stream === 'false') {
+          connectOptions.stream = false;
+        }
+        if (!atts.limit) {
+          connectOptions.limit = atts.limit;
+        }
+        return connectOptions;
       }
     }
   };
-});
+}
+
+function icecommLeaveDirective() {
+  return {
+    restrict: 'E',
+    require: '^icecomm',
+    replace: true,
+    template: '<button ng-if="local && hide" ng-click="leave()">{{text}}</button>',
+    link: function($scope, ele, atts, icecomm) {
+      var comm = icecomm.comm;
+      $scope.test = false;
+      $scope.text = atts.text || "Disconnect";
+      $scope.hide = atts.prestream === 'hide';
+      $scope.leave = function() {
+        comm.leave();
+        $scope.local = null;
+      }
+    }
+  };
+}
