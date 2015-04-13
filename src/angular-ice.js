@@ -13,9 +13,13 @@ angular.module('Icecomm',[])
     controller: function($attrs, $element) {
       var debugOptions = {debug: Boolean($attrs.debug) };
       var _this = this;
+      this.hi = "hi";
       this.comm = new Icecomm($attrs.apikey, debugOptions);
+      this.connect = function(room, options) {
+        _this.comm.connect(room, options);
+      }
     },
-    controllerAs: 'icecomm'
+    controllerAs: 'comm'
   }
 })
 .directive('icecommLocal', function($sce) {
@@ -25,7 +29,6 @@ angular.module('Icecomm',[])
     require: '^icecomm',
     template: '<video ng-if="local" autoplay class="icecomm-local" ng-src={{local.stream}}></video>',
     link: function($scope, ele, atts, icecomm) {
-      console.log('something');
       var comm = icecomm.comm;
       comm.on("local",function(peer){
         $scope.$apply(function () {
@@ -40,7 +43,7 @@ angular.module('Icecomm',[])
   return {
     restrict: 'E',
     require: '^icecomm',
-    replace: true,
+    replace: false,
     template:
         '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}"></video>',
     link: function($scope, ele, atts, icecomm) {
@@ -68,8 +71,7 @@ angular.module('Icecomm',[])
     replace: true,
     scope: true,
     template: '<button ng-click="connect()">{{text}}</div>',
-    link: function($scope, ele, atts, icecomm) {
-      var comm = icecomm.comm;
+    link: function($scope, ele, atts, comm) {
       $scope.text = atts.text || "Connect";
       $scope.connect = function() {
         var connectOptions = createConnectOptions();
