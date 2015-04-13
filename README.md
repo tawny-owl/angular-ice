@@ -21,7 +21,7 @@ The following script files needs to be inserted in this order
 ````
 The following directive needs to be inserted into the body element
 ````
-<body ng-app="myAPP" icecomm apikey="YOUR_API_KEY>
+<body ng-app="myAPP" icecomm apikey="YOUR_API_KEY">
 ````
 If you do not yet have an Icecomm API Key, you can get one on [icecomm.io](http://icecomm.io/signup).
 #TL;DR
@@ -37,6 +37,7 @@ There are four customizable directives.
 * icecomm-local provides the location for where to load your local video when icecomm-connect is clicked
 * icecomm-peer provides the location for where to load remote peers when connected
 * icecomm-leave inserts a button that leaves a user from a room
+
 #How do I connect to a room?
 To connect to a room, insert this custom directive into your html
 ````
