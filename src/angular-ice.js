@@ -50,7 +50,8 @@ function icecommPeerDirective($sce) {
     require: '^icecomm',
     replace: false,
     template:
-        '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}"></video>',
+    '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}">' +
+    '</video>',
     link: function($scope, ele, atts, icecomm) {
       var comm = icecomm.comm;
       $scope.peers = [];
@@ -62,9 +63,9 @@ function icecommPeerDirective($sce) {
       });
 
       comm.on("disconnect", function(peer){
-        $scope.$apply(function () {
+        // $scope.$apply(function () {
           $scope.peers.splice($scope.peers.indexOf(peer),1);
-        });
+        // });
       });
     }
   };
@@ -108,10 +109,12 @@ function icecommLeaveDirective() {
     restrict: 'E',
     require: '^icecomm',
     replace: true,
-    template: '<button ng-if="local" ng-click="leave()">{{text}}</div>',
+    template: '<button ng-if="local && hide" ng-click="leave()">{{text}}</button>',
     link: function($scope, ele, atts, icecomm) {
       var comm = icecomm.comm;
+      $scope.test = false;
       $scope.text = atts.text || "Disconnect";
+      $scope.hide = atts.prestream === 'hide';
       $scope.leave = function() {
         comm.leave();
         $scope.local = null;
