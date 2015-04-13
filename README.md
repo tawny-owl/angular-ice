@@ -34,13 +34,20 @@ Your video will appear where the icecomm-local directive is located
 <icecomm-local><icecomm-local/>
 ````
 #Where do remote peers appear?
-Remote peers appear where the icecomm-peer directive is located
+Remote peers appear where the icecomm-peer directive is located.
 ````
 <icecomm-peer><icecomm-peer/>
 ````
 #How do I turn off all videos?
-To remove
+To leave the room and remove all videos, the client needs to leave the room. A custom directive has been made which adds a button.
 ````
-<icecomm-leave text="Leave" hidden="true"/>
+<icecomm-leave></icecomm-leave>
 ````
-
+Custom attributes can be added to the icecomm-leave directive. A user can specify the text to shown in the button.
+````
+<icecomm-leave text="Leave"></icecomm-leave>
+````
+If the user wants the directive to only appear once local stream has rendered, the prestream attribute can be set to 'hide' as shown below.
+````
+<icecomm-leave prestream="hide"></icecomm-leave>
+````
