@@ -9,7 +9,8 @@
       restrict: 'E',
       replace: true,
       require: '^icecomm',
-      template: '<video ng-if="local" autoplay class="icecomm-local" ng-src={{local.stream}}></video>',
+      template: '<video ng-if="local" autoplay class="icecomm-local"' +
+        'ng-src={{local.stream}}></video>',
       link: function($scope, ele, atts, icecomm) {
         var comm = icecomm.comm;
         comm.on("local",function(peer){

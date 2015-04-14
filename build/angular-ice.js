@@ -80,7 +80,8 @@
       restrict: 'E',
       require: '^icecomm',
       replace: true,
-      template: '<button ng-if="local && hide" ng-click="leave()">{{text}}</button>',
+      template: '<button ng-if="local && hide" ng-click="leave()">' +
+        '{{text}}</button>',
       link: function($scope, ele, atts, icecomm) {
         var comm = icecomm.comm;
         $scope.test = false;
@@ -105,7 +106,8 @@
       restrict: 'E',
       replace: true,
       require: '^icecomm',
-      template: '<video ng-if="local" autoplay class="icecomm-local" ng-src={{local.stream}}></video>',
+      template: '<video ng-if="local" autoplay class="icecomm-local"' +
+        'ng-src={{local.stream}}></video>',
       link: function($scope, ele, atts, icecomm) {
         var comm = icecomm.comm;
         comm.on("local",function(peer){
@@ -130,8 +132,8 @@
       require: '^icecomm',
       replace: false,
       template:
-      '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}">' +
-      '</video>',
+      '<video ng-repeat="peer in peers" class="icecomm-peer"' +
+        'autoplay ng-src="{{peer.stream}}"></video>',
       link: function($scope, ele, atts, icecomm) {
         var comm = icecomm.comm;
         $scope.peers = [];

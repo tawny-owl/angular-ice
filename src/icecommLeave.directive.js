@@ -9,7 +9,8 @@
       restrict: 'E',
       require: '^icecomm',
       replace: true,
-      template: '<button ng-if="local && hide" ng-click="leave()">{{text}}</button>',
+      template: '<button ng-if="local && hide" ng-click="leave()">' +
+        '{{text}}</button>',
       link: function($scope, ele, atts, icecomm) {
         var comm = icecomm.comm;
         $scope.test = false;

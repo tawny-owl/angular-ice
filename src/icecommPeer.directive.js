@@ -10,8 +10,8 @@
       require: '^icecomm',
       replace: false,
       template:
-      '<video ng-repeat="peer in peers" class="icecomm-peer" autoplay ng-src="{{peer.stream}}">' +
-      '</video>',
+      '<video ng-repeat="peer in peers" class="icecomm-peer"' +
+        'autoplay ng-src="{{peer.stream}}"></video>',
       link: function($scope, ele, atts, icecomm) {
         var comm = icecomm.comm;
         $scope.peers = [];
