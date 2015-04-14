@@ -6,13 +6,10 @@
   <script src="./../build/angular-ice.js"></script>
 </head>
 <style>
-video {height: 300px;}
+video { height: 300px;}
 </style>
 <body ng-app="chatroom" icecomm apikey="YOUR_API_KEY">
-  <icecomm-connect room="custom room" audio=false></icecomm-connect>
-  <icecomm-local></icecomm-local>
-  <icecomm-peer></icecomm-peer>
-  <icecomm-leave prestream="hide"></icecomm-leave>
+
 </body>
   <script type="text/javascript" >
     angular.module("chatroom",['Icecomm']);
